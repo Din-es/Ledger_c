@@ -1,0 +1,17 @@
+# Normalise text in the repo; let git decide the working-copy ending.
+* text=auto
+
+# These are executed by a shell — CRLF breaks the shebang on Linux/macOS
+# ("bad interpreter: /bin/bash^M"), so force LF everywhere.
+*.sh text eol=lf
+Makefile text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Go tooling assumes LF.
+*.go text eol=lf
+go.mod text eol=lf
+
+*.svg text eol=lf
+*.png binary
+*.gif binary
