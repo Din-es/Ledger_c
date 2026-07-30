@@ -1,0 +1,43 @@
+{
+  "id": "immutable-records",
+  "title": "Records are immutable after bind",
+  "note": "docs/decisions/immutable-records.md",
+  "anchors": [
+    {
+      "file": "internal/ledger/record.go",
+      "range": [
+        42,
+        55
+      ],
+      "commit": "93e3f9ebe38f313c4268d19659d1c201d1097ba9",
+      "fingerprint": "sha256:cb76025a4ca7360539b1ce1143ac4daff0beb924278bfd40abffaccf78c14239",
+      "before": [
+        "\tRenamed    bool    `json:\"renamed,omitempty\"`",
+        "}",
+        ""
+      ],
+      "after": [
+        "",
+        "// ContextLines is how many lines of surrounding code we capture on each side.",
+        "const ContextLines = 3"
+      ],
+      "body": [
+        "// LinkRecord is one decision: prose lives in Note, the code it governs in",
+        "// Anchors.",
+        "//",
+        "// Records are deliberately immutable after bind. An earlier version cached the",
+        "// last resolution here, but writing to the record made `git commit -a` stage",
+        "// it — which the CI gate then read as \"the rationale was revisited\", silently",
+        "// defeating itself. Resolution is computed on demand instead.",
+        "type LinkRecord struct {",
+        "\tID      string   `json:\"id\"`",
+        "\tTitle   string   `json:\"title,omitempty\"`",
+        "\tNote    string   `json:\"note,omitempty\"` // path to the decision prose",
+        "\tAnchors []Anchor `json:\"anchors\"`",
+        "\tCreated string   `json:\"created\"`",
+        "}"
+      ]
+    }
+  ],
+  "created": "2026-07-30T14:24:02Z"
+}

@@ -1,0 +1,9 @@
+# Source and build config — only out/ ships.
+src/**
+tsconfig.json
+.vscodeignore
+node_modules/**
+**/*.map
+**/*.ts
+
+# Keep: out/, media/, package.json, README.md, LICENSE, CHANGELOG.md

@@ -1,0 +1,34 @@
+{
+  "id": "rename-threshold",
+  "title": "Follow renames at 25%, not git's default 50%",
+  "note": "docs/decisions/rename-threshold.md",
+  "anchors": [
+    {
+      "file": "internal/ledger/git.go",
+      "range": [
+        59,
+        63
+      ],
+      "commit": "93e3f9ebe38f313c4268d19659d1c201d1097ba9",
+      "fingerprint": "sha256:013862c7525103e99758ea9672e526a8ba4d1c21e70a8e9d346248a4097d4792",
+      "before": [
+        "\treturn git(args...)",
+        "}",
+        ""
+      ],
+      "after": [
+        "",
+        "// FollowRename reports a file's new path if it was renamed between commit and",
+        "// ref. Git's rename detection is similarity-based, so a file rewritten beyond"
+      ],
+      "body": [
+        "// renameThreshold is deliberately looser than git's 50% default: a file that",
+        "// both moves and gains a lot of code still scores low, and following a wrong",
+        "// candidate is harmless — the anchor body won't match there, so it resolves",
+        "// broken anyway.",
+        "const renameThreshold = \"-M25%\""
+      ]
+    }
+  ],
+  "created": "2026-07-30T14:24:02Z"
+}

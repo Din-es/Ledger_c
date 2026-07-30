@@ -83,6 +83,27 @@ bias is to break loudly rather than relocate silently.
   Build with `npm install && npx tsc -p ./`, then load the folder as an
   unpacked extension (F5 in VS Code, or symlink into `~/.vscode/extensions`).
 
+## This repo uses itself
+
+Four of the non-obvious choices in this codebase are bound with `ledger`, and
+`.github/workflows/decisions.yml` runs the gate on every pull request here. If
+you change the drift threshold, the rename threshold, the tie-break, or the
+record shape without touching the matching note in `docs/decisions/`, CI fails.
+
+```bash
+ledger list
+```
+
+```
+[fresh] break-loudly       internal/ledger/resolve.go:15-17     conf 1.00
+[fresh] break-loudly       internal/ledger/resolve.go:229-236   conf 1.00
+[fresh] immutable-records  internal/ledger/record.go:42-55      conf 1.00
+[fresh] rename-threshold   internal/ledger/git.go:59-63         conf 1.00
+```
+
+Those notes are worth reading before changing the resolver — each records a bug
+that was fixed the hard way.
+
 ## Testing
 
 ```bash

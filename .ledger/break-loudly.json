@@ -1,0 +1,61 @@
+{
+  "id": "break-loudly",
+  "title": "Break loudly rather than relocate silently",
+  "note": "docs/decisions/break-loudly.md",
+  "anchors": [
+    {
+      "file": "internal/ledger/resolve.go",
+      "range": [
+        15,
+        17
+      ],
+      "commit": "93e3f9ebe38f313c4268d19659d1c201d1097ba9",
+      "fingerprint": "sha256:07ba9c6ced60b1636c2d82a0c50ca4d4219ce32e7b163b9f297de2a231a7458c",
+      "before": [
+        "\tStatusBroken  = \"broken\"  // the governed code is gone or unrecognizable",
+        ")",
+        ""
+      ],
+      "after": [
+        "",
+        "// searchWindow bounds the fuzzy relocate to a neighborhood around the mapped",
+        "// position so cost stays linear on real files."
+      ],
+      "body": [
+        "// driftThreshold is the similarity below which a relocate is called broken",
+        "// rather than drifted. Bias toward breaking loudly over relocating silently.",
+        "const driftThreshold = 0.5"
+      ]
+    },
+    {
+      "file": "internal/ledger/resolve.go",
+      "range": [
+        229,
+        236
+      ],
+      "commit": "93e3f9ebe38f313c4268d19659d1c201d1097ba9",
+      "fingerprint": "sha256:b243ee71742e409402d061833dc2cb9ecc9f8008860789eb37d51390b6b7ce47",
+      "before": [
+        "\t\thi = len(cur)",
+        "\t}",
+        "\t// On equal similarity, prefer the candidate nearest the expected position."
+      ],
+      "after": [
+        "\t\t}",
+        "\t}",
+        "\tif best \u003c 0 {"
+      ],
+      "body": [
+        "\t// Edits are local, so a tie between two windows almost always means the",
+        "\t// nearer one is the real home of the code; taking the first match instead",
+        "\t// silently reports a span shifted off the actual lines.",
+        "\tbest, bestStart := -1.0, lo",
+        "\tfor i := lo; i+n-1 \u003c= len(cur) \u0026\u0026 i \u003c= hi; i++ {",
+        "\t\ts := similarity(body, sliceLines(cur, i, i+n-1))",
+        "\t\tif s \u003e best || (s == best \u0026\u0026 abs(i-approx) \u003c abs(bestStart-approx)) {",
+        "\t\t\tbest, bestStart = s, i"
+      ]
+    }
+  ],
+  "created": "2026-07-30T14:24:02Z"
+}

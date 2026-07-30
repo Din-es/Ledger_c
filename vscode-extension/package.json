@@ -82,5 +82,10 @@
     "documentation",
     "git",
     "code comprehension"
-  ]
+  ],
+  "icon": "media/icon.png",
+  "galleryBanner": {
+    "color": "#1a1a19",
+    "theme": "dark"
+  }
 }

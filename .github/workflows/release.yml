@@ -11,8 +11,8 @@ jobs:
   binaries:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v6
         with:
           go-version: "1.26"
 
@@ -48,8 +48,8 @@ jobs:
   vscode-extension:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: "20"
 
@@ -60,7 +60,7 @@ jobs:
           npx tsc -p ./
           npx --yes @vscode/vsce package --out decision-ledger.vsix
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: vscode-extension
           path: vscode-extension/decision-ledger.vsix
@@ -68,8 +68,8 @@ jobs:
   obsidian-plugin:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: "20"
 
