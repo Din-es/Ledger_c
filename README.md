@@ -4,6 +4,10 @@ Decisions that can't silently rot. Bind a design decision to the exact code it
 governs; `ledger` keeps the link anchored as the code moves, and fails CI when
 the code changes without the decision being revisited.
 
+![Anchoring a decision, following it through a refactor, and blocking a pull
+request that changes the code without revisiting the
+rationale](docs/media/demo.gif)
+
 **New here? Read [GETTING_STARTED.md](GETTING_STARTED.md)** — plain-language
 explanation, first decision in five minutes, and setup for Obsidian, VS Code,
 and CI.
