@@ -4,6 +4,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 )
@@ -459,9 +460,33 @@ func TestGoverning(t *testing.T) {
 	if got := ids(Governing(reports, "retry.go", 0)); len(got) != 2 {
 		t.Fatalf("want 2 for whole file (broken excluded), got %v", got)
 	}
-	// Separators must not matter.
-	if got := ids(Governing(reports, ".\\retry.go", 12)); len(got) != 2 {
-		t.Fatalf("path normalization failed, got %v", got)
+	// A "./" prefix must not matter anywhere.
+	if got := ids(Governing(reports, "./retry.go", 12)); len(got) != 2 {
+		t.Fatalf("leading ./ broke matching, got %v", got)
+	}
+	// Backslashes only separate paths on Windows; on Unix they are ordinary
+	// filename characters, so normalising them there would be wrong.
+	if runtime.GOOS == "windows" {
+		if got := ids(Governing(reports, ".\\retry.go", 12)); len(got) != 2 {
+			t.Fatalf("windows separators broke matching, got %v", got)
+		}
+	}
+}
+
+// Records are committed and shared between machines, so an anchor path must
+// be stored git-style with forward slashes regardless of who bound it.
+func TestAnchorPathsAreStoredPortable(t *testing.T) {
+	newRepo(t)
+	rec := &LinkRecord{ID: "p", Anchors: []Anchor{{File: "src/a/b.go", Range: [2]int{1, 2}}}}
+	if err := rec.Save(); err != nil {
+		t.Fatal(err)
+	}
+	loaded, err := Load("p")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got := loaded.Anchors[0].File; strings.Contains(got, `\`) {
+		t.Fatalf("anchor path must use forward slashes, got %q", got)
 	}
 }
 

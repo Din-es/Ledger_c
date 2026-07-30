@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"path/filepath"
 	"regexp"
 	"strconv"
 	"time"
@@ -76,7 +77,10 @@ func cmdBind(args []string) error {
 	if m == nil {
 		return fmt.Errorf("bad location %q, want file:start-end", args[0])
 	}
-	file := m[1]
+	// Records are committed and shared, so store the path the way git does —
+	// forward slashes. A Windows dev binding "src\f.go" would otherwise write
+	// a path no teammate on Linux or macOS can resolve.
+	file := filepath.ToSlash(filepath.Clean(m[1]))
 	start, _ := strconv.Atoi(m[2])
 	end, _ := strconv.Atoi(m[3])
 	if start < 1 || end < start {
@@ -100,7 +104,7 @@ func cmdBind(args []string) error {
 		case "--note-file":
 			i++
 			if i < len(args) {
-				notePath = args[i]
+				notePath = filepath.ToSlash(filepath.Clean(args[i]))
 			}
 		case "--add":
 			add = true
@@ -519,4 +523,3 @@ func short(sha string) string {
 	}
 	return sha
 }
-

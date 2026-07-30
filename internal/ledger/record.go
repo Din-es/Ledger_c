@@ -32,10 +32,10 @@ type Anchor struct {
 // Resolution is the last computed location of an anchor at some HEAD.
 type Resolution struct {
 	Commit     string  `json:"commit"`
-	File       string  `json:"file"`             // current path (differs if renamed)
+	File       string  `json:"file"` // current path (differs if renamed)
 	Range      [2]int  `json:"range"`
 	Confidence float64 `json:"confidence"`
-	Status     string  `json:"status"`           // fresh | drifted | broken
+	Status     string  `json:"status"` // fresh | drifted | broken
 	Renamed    bool    `json:"renamed,omitempty"`
 }
 
@@ -60,16 +60,16 @@ const ContextLines = 3
 // Report is a resolved view of one decision, shaped for machine consumers
 // (the Obsidian plugin) rather than the terminal.
 type Report struct {
-	ID         string     `json:"id"`
-	Title      string     `json:"title,omitempty"`
-	Note       string     `json:"note,omitempty"`
-	File       string     `json:"file"`
-	Range      [2]int     `json:"range"`
-	Status     string     `json:"status"`
-	Confidence float64    `json:"confidence"`
-	Renamed    bool       `json:"renamed,omitempty"`
-	BoundAt    string     `json:"boundAt"`
-	Code       []string   `json:"code,omitempty"` // live code at the resolved span
+	ID         string   `json:"id"`
+	Title      string   `json:"title,omitempty"`
+	Note       string   `json:"note,omitempty"`
+	File       string   `json:"file"`
+	Range      [2]int   `json:"range"`
+	Status     string   `json:"status"`
+	Confidence float64  `json:"confidence"`
+	Renamed    bool     `json:"renamed,omitempty"`
+	BoundAt    string   `json:"boundAt"`
+	Code       []string `json:"code,omitempty"` // live code at the resolved span
 }
 
 // Governing returns the reports whose resolved span covers the given file and
