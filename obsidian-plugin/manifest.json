@@ -1,0 +1,10 @@
+{
+  "id": "decision-ledger",
+  "name": "Decision Ledger",
+  "version": "1.0.0",
+  "minAppVersion": "1.4.0",
+  "description": "Bind decisions to the code they govern and see when that code drifts.",
+  "author": "Dinesh",
+  "isDesktopOnly": true,
+  "authorUrl": "https://github.com/Din-es"
+}

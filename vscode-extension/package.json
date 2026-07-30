@@ -1,0 +1,86 @@
+{
+  "name": "decision-ledger",
+  "displayName": "Decision Ledger",
+  "description": "See which design decision governs the code you're reading, and bind new ones from a selection.",
+  "version": "1.0.0",
+  "publisher": "Din-es",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "decisionLedger.why",
+        "title": "Decision Ledger: Why does this code exist?"
+      },
+      {
+        "command": "decisionLedger.bind",
+        "title": "Decision Ledger: Bind selection to a decision"
+      },
+      {
+        "command": "decisionLedger.refresh",
+        "title": "Decision Ledger: Refresh decisions"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "decisionLedger.bind",
+          "when": "editorHasSelection",
+          "group": "decisionLedger@1"
+        },
+        {
+          "command": "decisionLedger.why",
+          "group": "decisionLedger@2"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Decision Ledger",
+      "properties": {
+        "decisionLedger.binaryPath": {
+          "type": "string",
+          "default": "ledger",
+          "description": "Path to the compiled ledger executable."
+        },
+        "decisionLedger.showCodeLens": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show a CodeLens above each governed code span."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.4.0"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Din-es/Ledger_c.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Din-es/Ledger_c/issues"
+  },
+  "homepage": "https://github.com/Din-es/Ledger_c#readme",
+  "keywords": [
+    "adr",
+    "architecture decision record",
+    "documentation",
+    "git",
+    "code comprehension"
+  ]
+}
