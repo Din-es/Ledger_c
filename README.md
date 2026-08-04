@@ -117,6 +117,19 @@ go test ./...
 Tests build real temp git repos and exercise shift, drift, deletion, rename,
 and the CI gate.
 
+## Contributing
+
+This is a young project and most contributions are genuinely useful rather than
+cosmetic. There are
+[good first issues](https://github.com/Din-es/Ledger_c/labels/good%20first%20issue)
+if you want something small and self-contained, and
+[help wanted](https://github.com/Din-es/Ledger_c/labels/help%20wanted) for
+bigger pieces — a Neovim client, an HTML report, or the open design problem of
+anchoring to symbols instead of line ranges.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the build, the test approach, and a
+map of the codebase.
+
 ## License
 
 MIT — see [LICENSE](LICENSE).
