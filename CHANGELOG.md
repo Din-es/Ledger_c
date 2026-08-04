@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.1.0
+
+**Added**
+
+- `ledger why` accepts a line range: `ledger why file.go:10-40` reports every
+  decision whose span overlaps those lines, which is what you want when
+  reviewing a diff. The whole-file and single-line forms are unchanged.
+  Thanks to [@JasonColapietro](https://github.com/JasonColapietro) for the
+  contribution (#3, #11).
+
 ## v1.0.1
 
 Use this instead of v1.0.0.

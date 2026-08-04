@@ -47,7 +47,7 @@ func main() {
 	}
 }
 
-const version = "1.0.1"
+const version = "1.1.0"
 
 func usage() {
 	fmt.Fprint(os.Stderr, `ledger — decisions that can't silently rot

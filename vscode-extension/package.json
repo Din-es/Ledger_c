@@ -2,7 +2,7 @@
   "name": "decision-ledger",
   "displayName": "Decision Ledger",
   "description": "See which design decision governs the code you're reading, and bind new ones from a selection.",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "publisher": "Din-es",
   "engines": {
     "vscode": "^1.85.0"
