@@ -46,7 +46,10 @@ go install github.com/Din-es/Ledger_c/cmd/ledger@latest
 One-time setup:
 
 1. Create a free Azure DevOps organisation at <https://dev.azure.com>.
-2. Generate a Personal Access Token with **Marketplace → Manage** scope.
+2. Create a Personal Access Token at
+   <https://go.microsoft.com/fwlink/?LinkId=307137> — set **Organization** to
+   *All accessible organizations* and **Scopes** to *Custom defined → Show all
+   scopes → Marketplace (Manage)*. Anything narrower fails at publish time.
 3. Create the publisher `Din-es` at
    <https://marketplace.visualstudio.com/manage>.
 
@@ -57,35 +60,56 @@ npx @vscode/vsce login Din-es
 npx @vscode/vsce publish
 ```
 
-Before the first publish, add a 128×128 PNG icon and set `"icon"` in
-`package.json` — listings without one look abandoned.
+Docs: [Publishing an extension](https://code.visualstudio.com/api/working-with-extensions/publishing-extension)
+
+Nothing is blocking this one — `package.json` already has every required field
+(`name`, `version`, `publisher`, `engines.vscode`) and every recommended one
+(`description`, `icon`, `license`, `repository`). The account is the only
+missing piece.
+
+**No account needed to test or share.** `npx @vscode/vsce package` produces a
+`.vsix` that anyone can install with
+`code --install-extension decision-ledger-1.1.0.vsix`. Worth doing before the
+public listing.
 
 ## 4. Obsidian community plugins
 
-The store is a curated list, reviewed by hand, and it takes a few weeks.
+**The submission process changed.** It is no longer a pull request to
+`obsidianmd/obsidian-releases`. You now submit through the community directory:
 
-1. Make sure a GitHub release exists whose tag exactly matches the
-   `version` in `manifest.json` (`1.0.0`), with `main.js`, `manifest.json`
-   and `styles.css` attached as loose files. The release workflow already
-   does this.
-2. Fork <https://github.com/obsidianmd/obsidian-releases>.
-3. Add an entry to `community-plugins.json`:
+1. Sign in at <https://community.obsidian.md> with your Obsidian account.
+2. Link your GitHub account so it can verify you own the repo.
+3. Choose **New plugin**, give it the repository URL, accept the developer
+   policies.
+4. Answer review feedback by pushing fixes and cutting new releases.
 
-```json
-{
-  "id": "decision-ledger",
-  "name": "Decision Ledger",
-  "author": "Dinesh",
-  "description": "Bind decisions to the code they govern and see when that code drifts.",
-  "repo": "Din-es/Ledger_c"
-}
-```
+Docs: [Submit your plugin](https://docs.obsidian.md/Plugins/Releasing/Submit+your+plugin)
+· [Plugin guidelines](https://docs.obsidian.md/Plugins/Releasing/Plugin+guidelines)
 
-4. Open a PR and answer the reviewer's comments.
+### Two things block us today
 
-Note the plugin needs the `ledger` binary installed separately and is
-desktop-only. Say so plainly in the plugin README — reviewers check, and
-users will otherwise file bugs about the `spawn ledger ENOENT` error.
+**a. The tag must not have a `v` prefix.** Obsidian requires a GitHub release
+whose tag *exactly* matches `version` in `manifest.json` — so `1.1.0`, not
+`v1.1.0`. Our release tags are `v`-prefixed, which is right for Go but wrong
+for Obsidian. Either publish an additional un-prefixed tag for the plugin, or
+release the plugin from its own repo with its own tagging scheme.
+
+**b. Obsidian expects the repo root to *be* the plugin.** The directory reads
+`manifest.json` from the default branch HEAD, and the required root files are
+`README.md`, `LICENSE` and `manifest.json`. Ours live in `obsidian-plugin/`,
+because this repo is primarily a Go tool.
+
+**Recommendation: give the plugin its own repository** (e.g.
+`Din-es/obsidian-decision-ledger`) with the plugin at its root. That is the
+shape every community plugin has, it sidesteps both problems, and it keeps the
+Go release cadence independent of the plugin's. Mirror or submodule the source
+if you would rather keep one place to edit.
+
+### Before submitting
+
+The plugin needs the `ledger` binary installed separately and is desktop-only.
+Say so in the first paragraph of the plugin README — reviewers check, and
+users will otherwise file bugs about `spawn ledger ENOENT`.
 
 ## 5. Package managers (later)
 
