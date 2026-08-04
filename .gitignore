@@ -6,3 +6,6 @@ obsidian-plugin/package-lock.json
 vscode-extension/node_modules/
 vscode-extension/out/
 vscode-extension/package-lock.json
+
+# local working notes, not for the public repo
+/CONTEXT.md
