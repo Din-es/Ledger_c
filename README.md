@@ -37,6 +37,7 @@ changes but its rationale doesn't.
 ```
 ledger init
 ledger bind <file>:<start>-<end> --note <id> [--title "..."] [--add] [--note-file <path>]
+ledger unbind <id>
 ledger resolve <id> [--json]
 ledger why <file>[:<line>[-<end>]] [--json]
 ledger list [--json]
@@ -48,6 +49,7 @@ ledger verify [--since <base>] [--strict]
   content fingerprint + surrounding context). Re-binding an id re-anchors it,
   which is how you clear a drift; `--add` appends another anchor so one
   decision can govern several places.
+- **unbind** — retire a decision record while preserving its rationale document.
 - **resolve** — find where that span lives now. Reports `fresh` (tracked),
   `drifted` (relocated by similarity, content changed), or `broken` (the code
   is gone).

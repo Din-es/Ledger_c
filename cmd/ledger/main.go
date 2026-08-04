@@ -22,6 +22,8 @@ func main() {
 	switch os.Args[1] {
 	case "bind":
 		err = cmdBind(os.Args[2:])
+	case "unbind":
+		err = cmdUnbind(os.Args[2:])
 	case "resolve":
 		err = cmdResolve(os.Args[2:])
 	case "verify":
@@ -58,6 +60,7 @@ usage:
        [--title "..."] [--add]                      --add appends another anchor
        [--note-file <path>]                          where the rationale lives
                                                     (default docs/decisions/<id>.md)
+  ledger unbind <id>                                 retire a decision record; keep its rationale
   ledger resolve <id> [--json]                      where is this code now?
   ledger why <file>[:<line>[-<end>]] [--json]       which decision governs this?
   ledger list [--json]                              status of every decision
@@ -199,6 +202,40 @@ func cmdBind(args []string) error {
 	}
 	fmt.Printf("%s %s → %s:%d-%d @ %s\n", verb, id, file, start, end, short(head))
 	fmt.Printf("   rationale: %s\n", rec.Note)
+	return nil
+}
+
+// cmdUnbind retires a decision record without deleting its rationale. The
+// prose may still be useful history, and removing it would be an irreversible
+// surprise from a command whose job is to stop tracking code.
+func cmdUnbind(args []string) error {
+	if len(args) != 1 {
+		return fmt.Errorf("unbind needs exactly one decision id")
+	}
+	if err := validDecisionID(args[0]); err != nil {
+		return err
+	}
+	rec, err := ledger.Load(args[0])
+	if err != nil {
+		return err
+	}
+	if err := ledger.Remove(args[0]); err != nil {
+		return err
+	}
+	fmt.Printf("unbound %s\n", rec.ID)
+	if rec.Note != "" {
+		fmt.Printf("   rationale kept: %s\n", rec.Note)
+	}
+	return nil
+}
+
+// validDecisionID keeps unbind scoped to a single record in .ledger/. Unlike
+// bind, unbind deletes a file, so accepting a path-shaped id would turn a
+// normal CLI typo into a path traversal outside the ledger directory.
+func validDecisionID(id string) error {
+	if id == "" || id == "." || id == ".." || strings.ContainsAny(id, "/\\") {
+		return fmt.Errorf("bad decision id %q", id)
+	}
 	return nil
 }
 
