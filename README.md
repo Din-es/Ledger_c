@@ -80,8 +80,9 @@ bias is to break loudly rather than relocate silently.
 
 ## Editor surfaces
 
-- `obsidian-plugin/` — authoring side. A ```` ```ledger ```` codeblock renders
-  the live code a decision governs, plus a staleness sidebar. See its README.
+- **[obsidian-decision-ledger](https://github.com/Din-es/obsidian-decision-ledger)**
+  — authoring side, in its own repository. A ```` ```ledger ```` codeblock
+  renders the live code a decision governs, plus a staleness sidebar.
 - `vscode-extension/` — reading side. Gutter dot, CodeLens and hover on
   governed spans, and a "why does this code exist?" command.
   Build with `npm install && npx tsc -p ./`, then load the folder as an
@@ -135,10 +136,9 @@ map of the codebase.
 MIT — see [LICENSE](LICENSE).
 
 **Dependencies.** The engine has none: `go.mod` requires nothing beyond the
-standard library. The Obsidian plugin and VS Code extension use TypeScript,
-esbuild and type packages at build time only (all MIT or Apache-2.0); neither
-shipped bundle vendors third-party code — they require only `child_process`,
-`path`, and their host's own API.
+standard library. The VS Code extension uses TypeScript and type packages at
+build time only (MIT / Apache-2.0); the shipped bundle vendors no third-party
+code, requiring only `child_process`, `path`, and the VS Code API.
 
 **git.** `ledger` runs `git` as a separate process. Invoking a program is not
 linking to it, so git's GPL-2.0 does not reach this codebase — the same basis
@@ -147,9 +147,10 @@ from git is copied, bundled, or redistributed here.
 
 ## Status
 
-**v1.0.0.** Anchor engine (shift, fuzzy relocate, rename-follow), CI gate,
-multi-anchor decisions, JSON IPC, Obsidian plugin, and VS Code extension —
-all working and verified in their real hosts.
+**v1.1.0.** Anchor engine (shift, fuzzy relocate, rename-follow), CI gate,
+multi-anchor decisions, JSON IPC, and both editor integrations — all working
+and verified in their real hosts.
 
 Possible next: an in-process go-git engine instead of shelling out, and
-binding by symbol name rather than line range.
+binding by symbol name rather than line range. See the
+[open issues](https://github.com/Din-es/Ledger_c/issues).

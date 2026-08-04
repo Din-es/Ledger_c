@@ -14,12 +14,14 @@ go build -o ledger ./cmd/ledger
 go test ./...
 ```
 
-For the editor integrations you also need Node 18+:
+For the VS Code extension you also need Node 18+:
 
 ```bash
-cd obsidian-plugin  && npm install && npm run build
 cd vscode-extension && npm install && npx tsc -p ./
 ```
+
+The Obsidian plugin lives in its
+[own repository](https://github.com/Din-es/obsidian-decision-ledger).
 
 ## Before you open a pull request
 

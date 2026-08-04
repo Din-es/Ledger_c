@@ -32,16 +32,13 @@ jobs:
       - run: go vet ./...
       - run: go test ./...
 
-  typescript:
+  vscode-extension:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
         with:
           node-version: "20"
-      - name: obsidian plugin
-        working-directory: obsidian-plugin
-        run: npm install && npm run build
       - name: vscode extension
         working-directory: vscode-extension
         run: npm install && npx tsc -p ./

@@ -29,7 +29,8 @@ git push origin v1.0.0
 
 `.github/workflows/release.yml` builds binaries for linux/amd64, linux/arm64,
 darwin/amd64, darwin/arm64 and windows/amd64, publishes them with checksums,
-attaches the Obsidian plugin files, and uploads the packaged `.vsix`.
+and uploads the packaged `.vsix`. The Obsidian plugin releases from its own
+repository (see step 4).
 
 `go install` works the moment the tag is public — no registry, no account:
 
@@ -74,59 +75,29 @@ public listing.
 
 ## 4. Obsidian community plugins
 
-**The submission process changed.** It is no longer a pull request to
-`obsidianmd/obsidian-releases`. You now submit through the community directory:
+The plugin lives in its own repository:
+**<https://github.com/Din-es/obsidian-decision-ledger>**
+
+It was split out because Obsidian's community directory reads `manifest.json`
+from the repository root and requires a release tag matching it exactly with no
+`v` prefix — neither of which works from inside this Go monorepo. That repo
+already tags `1.1.0` (un-prefixed) and attaches `main.js`, `manifest.json` and
+`styles.css` loose on the release, which is what the directory expects.
+
+To submit:
 
 1. Sign in at <https://community.obsidian.md> with your Obsidian account.
 2. Link your GitHub account so it can verify you own the repo.
-3. Choose **New plugin**, give it the repository URL, accept the developer
+3. Choose **New plugin**, give it
+   `https://github.com/Din-es/obsidian-decision-ledger`, accept the developer
    policies.
 4. Answer review feedback by pushing fixes and cutting new releases.
 
 Docs: [Submit your plugin](https://docs.obsidian.md/Plugins/Releasing/Submit+your+plugin)
 · [Plugin guidelines](https://docs.obsidian.md/Plugins/Releasing/Plugin+guidelines)
 
-### Two things block us today
-
-**a. The tag must not have a `v` prefix.** Obsidian requires a GitHub release
-whose tag *exactly* matches `version` in `manifest.json` — so `1.1.0`, not
-`v1.1.0`. Our release tags are `v`-prefixed, which is right for Go but wrong
-for Obsidian. Either publish an additional un-prefixed tag for the plugin, or
-release the plugin from its own repo with its own tagging scheme.
-
-**b. Obsidian expects the repo root to *be* the plugin.** The directory reads
-`manifest.json` from the default branch HEAD, and the required root files are
-`README.md`, `LICENSE` and `manifest.json`. Ours live in `obsidian-plugin/`,
-because this repo is primarily a Go tool.
-
-**Recommendation: give the plugin its own repository** (e.g.
-`Din-es/obsidian-decision-ledger`) with the plugin at its root. That is the
-shape every community plugin has, it sidesteps both problems, and it keeps the
-Go release cadence independent of the plugin's. Mirror or submodule the source
-if you would rather keep one place to edit.
-
-### Before submitting
-
-The plugin needs the `ledger` binary installed separately and is desktop-only.
-Say so in the first paragraph of the plugin README — reviewers check, and
-users will otherwise file bugs about `spawn ledger ENOENT`.
+Reviewers check that the README is upfront about limitations. Its first
+paragraph already says the plugin needs the `ledger` binary installed
+separately and is desktop-only.
 
 ## 5. Package managers (later)
-
-Once releases exist with stable checksums:
-
-- **Scoop** (Windows): a manifest JSON pointing at the release zip.
-- **Homebrew** (macOS/Linux): a formula in a `homebrew-tap` repo.
-- **winget**: a manifest PR to `microsoft/winget-pkgs`.
-
-None of these are worth doing until people are actually asking for them.
-
-## Before you announce it
-
-- Add a short demo GIF to the README — this tool is much easier to show
-  than to explain.
-- The honest pitch is the CI gate, not the note-taking. Lead with
-  *"your build fails when code changes without its decision being
-  revisited."*
-- It is one release old and has only run on small repos. Say that. It buys
-  goodwill and sets up the bug reports you actually want.

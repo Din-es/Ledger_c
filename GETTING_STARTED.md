@@ -198,12 +198,15 @@ That's the core loop. Everything below is surfacing it where you already work.
 
 **Install:**
 
-1. Build the plugin:
+1. Build the plugin from its
+   [own repository](https://github.com/Din-es/obsidian-decision-ledger):
    ```bash
-   cd obsidian-plugin
-   npm install
-   npm run build
+   git clone https://github.com/Din-es/obsidian-decision-ledger
+   cd obsidian-decision-ledger
+   npm install && npm run build
    ```
+   Or download `main.js`, `manifest.json` and `styles.css` straight from its
+   [releases](https://github.com/Din-es/obsidian-decision-ledger/releases).
 2. Copy `main.js`, `manifest.json`, and `styles.css` into
    `<your-vault>/.obsidian/plugins/decision-ledger/`
 3. In Obsidian: **Settings → Community plugins** → turn off Restricted mode →

@@ -64,26 +64,3 @@ jobs:
         with:
           name: vscode-extension
           path: vscode-extension/decision-ledger.vsix
-
-  obsidian-plugin:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
-        with:
-          node-version: "20"
-
-      # The community-plugin store expects these three files loose on the
-      # release, not zipped.
-      - name: build the plugin
-        working-directory: obsidian-plugin
-        run: |
-          npm install
-          npm run build
-
-      - uses: softprops/action-gh-release@v2
-        with:
-          files: |
-            obsidian-plugin/main.js
-            obsidian-plugin/manifest.json
-            obsidian-plugin/styles.css
