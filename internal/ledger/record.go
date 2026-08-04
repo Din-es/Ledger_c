@@ -76,6 +76,15 @@ type Report struct {
 // line. A line of 0 matches every decision in the file. This is the code→note
 // direction: "why does this code exist?"
 func Governing(reports []Report, file string, line int) []Report {
+	if line == 0 {
+		return GoverningRange(reports, file, 0, 0)
+	}
+	return GoverningRange(reports, file, line, line)
+}
+
+// GoverningRange returns the reports whose resolved spans overlap the inclusive
+// requested range. A 0-0 range matches every decision in the file.
+func GoverningRange(reports []Report, file string, start, end int) []Report {
 	want := filepath.ToSlash(filepath.Clean(file))
 	var out []Report
 	for _, rp := range reports {
@@ -85,7 +94,7 @@ func Governing(reports []Report, file string, line int) []Report {
 		if filepath.ToSlash(filepath.Clean(rp.File)) != want {
 			continue
 		}
-		if line == 0 || (line >= rp.Range[0] && line <= rp.Range[1]) {
+		if start == 0 || (start <= rp.Range[1] && end >= rp.Range[0]) {
 			out = append(out, rp)
 		}
 	}

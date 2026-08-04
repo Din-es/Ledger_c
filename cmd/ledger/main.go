@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/Din-es/Ledger_c/internal/ledger"
@@ -58,7 +59,7 @@ usage:
        [--note-file <path>]                          where the rationale lives
                                                     (default docs/decisions/<id>.md)
   ledger resolve <id> [--json]                      where is this code now?
-  ledger why <file>[:<line>] [--json]               which decision governs this?
+  ledger why <file>[:<line>[-<end>]] [--json]       which decision governs this?
   ledger list [--json]                              status of every decision
   ledger verify [--since <base>] [--strict]         CI gate
 
@@ -324,21 +325,40 @@ func cmdList(args []string) error {
 	return nil
 }
 
-var whyRe = regexp.MustCompile(`^(.+?)(?::(\d+))?$`)
+var whyRangeRe = regexp.MustCompile(`^(\d+)(?:-(\d+))?$`)
+
+func parseWhyLocation(location string) (file string, start, end int, err error) {
+	if location == "" {
+		return "", 0, 0, fmt.Errorf("bad location %q, want file[:line[-end]]", location)
+	}
+	colon := strings.LastIndex(location, ":")
+	if colon < 0 || colon == len(location)-1 || location[colon+1] < '0' || location[colon+1] > '9' {
+		return location, 0, 0, nil
+	}
+	m := whyRangeRe.FindStringSubmatch(location[colon+1:])
+	if m == nil || colon == 0 {
+		return "", 0, 0, fmt.Errorf("bad location %q, want file[:line[-end]]", location)
+	}
+	file = location[:colon]
+	start, _ = strconv.Atoi(m[1])
+	end = start
+	if m[2] != "" {
+		end, _ = strconv.Atoi(m[2])
+	}
+	if start < 1 || end < start {
+		return "", 0, 0, fmt.Errorf("bad range %d-%d", start, end)
+	}
+	return file, start, end, nil
+}
 
 // cmdWhy answers "why does this code exist?" — the reverse of bind.
 func cmdWhy(args []string) error {
 	if len(args) == 0 {
-		return fmt.Errorf("why needs a <file>[:<line>]")
+		return fmt.Errorf("why needs a <file>[:<line>[-<end>]]")
 	}
-	m := whyRe.FindStringSubmatch(args[0])
-	if m == nil {
-		return fmt.Errorf("bad location %q, want file[:line]", args[0])
-	}
-	file := m[1]
-	line := 0
-	if m[2] != "" {
-		line, _ = strconv.Atoi(m[2])
+	file, start, end, err := parseWhyLocation(args[0])
+	if err != nil {
+		return err
 	}
 
 	recs, skipped, err := ledger.AllRecords()
@@ -350,7 +370,7 @@ func cmdWhy(args []string) error {
 	for _, r := range recs {
 		all = append(all, r.Reports()...)
 	}
-	hits := ledger.Governing(all, file, line)
+	hits := ledger.GoverningRange(all, file, start, end)
 
 	if hasFlag(args, "--json") {
 		if hits == nil {
