@@ -38,7 +38,7 @@ changes but its rationale doesn't.
 ledger init
 ledger bind <file>:<start>-<end> --note <id> [--title "..."] [--add] [--note-file <path>]
 ledger resolve <id> [--json]
-ledger why <file>[:<line>] [--json]
+ledger why <file>[:<line>[-<end>]] [--json]
 ledger list [--json]
 ledger verify [--since <base>] [--strict]
 ```
@@ -56,7 +56,7 @@ ledger verify [--since <base>] [--strict]
   `<base>` and `HEAD` but its note/record was not touched in the same range.
 - **list** — resolve every decision at once. `--json` is the IPC surface the
   editor integrations consume.
-- **why** — the reverse of bind: which decisions govern this line?
+- **why** — the reverse of bind: which decisions govern this line or range?
 
 ## Demo
 

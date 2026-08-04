@@ -473,6 +473,45 @@ func TestGoverning(t *testing.T) {
 	}
 }
 
+func TestGoverningRange(t *testing.T) {
+	reports := []Report{
+		{ID: "jitter", File: "retry.go", Range: [2]int{11, 13}, Status: StatusFresh},
+		{ID: "loop", File: "retry.go", Range: [2]int{7, 14}, Status: StatusDrifted},
+	}
+
+	ids := func(rs []Report) []string {
+		out := []string{}
+		for _, r := range rs {
+			out = append(out, r.ID)
+		}
+		return out
+	}
+
+	// The issue example crosses both anchors, so both decisions must be listed.
+	if got := ids(GoverningRange(reports, "retry.go", 10, 12)); len(got) != 2 || got[0] != "jitter" || got[1] != "loop" {
+		t.Fatalf("want [jitter loop] overlapping range 10-12, got %v", got)
+	}
+
+	one := []Report{{ID: "decision", File: "file.go", Range: [2]int{10, 20}, Status: StatusFresh}}
+	for _, tc := range []struct {
+		name       string
+		start, end int
+		want       int
+	}{
+		{name: "requested range fully inside", start: 12, end: 18, want: 1},
+		{name: "governing span fully inside", start: 5, end: 25, want: 1},
+		{name: "overlap at start boundary", start: 5, end: 10, want: 1},
+		{name: "overlap at end boundary", start: 20, end: 25, want: 1},
+		{name: "no hit", start: 21, end: 25, want: 0},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			if got := GoverningRange(one, "file.go", tc.start, tc.end); len(got) != tc.want {
+				t.Fatalf("range %d-%d: want %d hit(s), got %d", tc.start, tc.end, tc.want, len(got))
+			}
+		})
+	}
+}
+
 // Records are committed and shared between machines, so an anchor path must
 // be stored git-style with forward slashes regardless of who bound it.
 func TestAnchorPathsAreStoredPortable(t *testing.T) {
