@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.2.0
+
+**Added**
+
+- `ledger unbind <id>` retires a decision record while deliberately keeping its
+  rationale document — the prose is durable project history even once the code
+  constraint is gone. The retained path is printed so nothing goes missing
+  silently. Ids containing path separators are rejected, so a typo cannot
+  delete outside `.ledger/`. Thanks to
+  [@JasonColapietro](https://github.com/JasonColapietro) (#2, #12).
+
 ## v1.1.0
 
 **Added**

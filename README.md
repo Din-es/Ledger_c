@@ -149,7 +149,7 @@ from git is copied, bundled, or redistributed here.
 
 ## Status
 
-**v1.1.0.** Anchor engine (shift, fuzzy relocate, rename-follow), CI gate,
+**v1.2.0.** Anchor engine (shift, fuzzy relocate, rename-follow), CI gate,
 multi-anchor decisions, JSON IPC, and both editor integrations — all working
 and verified in their real hosts.
 
