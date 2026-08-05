@@ -192,3 +192,16 @@ func Load(id string) (*LinkRecord, error) {
 	}
 	return &r, nil
 }
+
+// Remove deletes a decision record while deliberately leaving its rationale
+// document untouched. Decision prose is durable project history even after
+// its code constraint no longer applies.
+func Remove(id string) error {
+	if err := os.Remove(recordPath(id)); err != nil {
+		if os.IsNotExist(err) {
+			return fmt.Errorf("no such decision %q: %w", id, err)
+		}
+		return err
+	}
+	return nil
+}

@@ -345,6 +345,7 @@ decision's code is *gone*. Add `--strict` to also fail on drift.
 | `ledger bind <file>:<start>-<end> --note <id>` | Anchor a decision to code (re-run to re-anchor) |
 | `ledger bind ... --note <id> --add` | Add another anchor to the same decision |
 | `ledger bind ... --note-file <path>` | Where the rationale lives (default `docs/decisions/<id>.md`) |
+| `ledger unbind <id>` | Retire a decision record while keeping its rationale document |
 | `ledger resolve <id>` | Where is this decision's code now? |
 | `ledger why <file>[:<line>[-<end>]]` | Which decisions govern this file, line, or range? |
 | `ledger list` | Status of every decision |
