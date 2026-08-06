@@ -582,3 +582,33 @@ func TestSliceLinesClampsBounds(t *testing.T) {
 		t.Fatalf("want empty for inverted range, got %d", len(got))
 	}
 }
+
+// Inserting lines *inside* a governed span is a change to that span — adding a
+// guard clause or an extra condition alters what the code does. git reports a
+// pure insertion as `@@ -N,0 +M,K @@` with oldCount 0, and an early version of
+// rangeTouched skipped those outright, so the CI gate silently passed
+// pull requests that rewrote the inside of a decision.
+func TestCodeChangedDetectsInsertionInsideSpan(t *testing.T) {
+	commit := newRepo(t)
+	a := bindSample(t)
+	base, err := HeadSHA()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// Insert a line in the middle of the anchored block.
+	lines := strings.Split(sample, "\n")
+	out := append([]string{}, lines[:anchoredRange[0]]...)
+	out = append(out, "\t\tif shuttingDown() { return err }")
+	out = append(out, lines[anchoredRange[0]:]...)
+	write(t, "retry.go", strings.Join(out, "\n"))
+	commit("insert a guard inside the governed span")
+
+	changed, broken := CodeChanged(a, base, "HEAD")
+	if broken {
+		t.Fatal("anchor unexpectedly broken at base")
+	}
+	if !changed {
+		t.Fatal("inserting inside the governed span did not trip the gate")
+	}
+}

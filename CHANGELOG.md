@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.2.1
+
+**Fixed**
+
+- The CI gate missed **pure insertions inside a governed span**. git reports an
+  insertion as `@@ -N,0 +M,K @@` with `oldCount == 0`, and `rangeTouched()`
+  skipped those hunks outright — so adding a guard clause or an extra condition
+  inside a decision's code did not trip `verify --since`. `resolve` reported the
+  drift correctly, which made the gap easy to miss. Found by evolving a sample
+  app across five versions. Pinned by `TestCodeChangedDetectsInsertionInsideSpan`.
+
 ## v1.2.0
 
 **Added**

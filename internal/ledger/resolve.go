@@ -76,6 +76,15 @@ func mapLine(line int, hunks []hunk) (newLine int, touched bool) {
 func rangeTouched(start, end int, hunks []hunk) bool {
 	for _, h := range hunks {
 		if h.oldCount == 0 {
+			// A pure insertion. git reports it as `-N,0`, meaning the new
+			// lines land between old lines N and N+1, so there is no old
+			// interval to overlap. It still rewrites the span when that split
+			// point is strictly inside it — adding a guard clause changes what
+			// the governed code does. Skipping these let the gate pass pull
+			// requests that rewrote the inside of a decision.
+			if h.oldStart >= start && h.oldStart < end {
+				return true
+			}
 			continue
 		}
 		hs, he := h.oldStart, h.oldStart+h.oldCount-1
