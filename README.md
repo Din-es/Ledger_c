@@ -103,7 +103,7 @@ ledger list
 
 ```
 [fresh] break-loudly       internal/ledger/resolve.go:15-17     conf 1.00
-[fresh] break-loudly       internal/ledger/resolve.go:229-236   conf 1.00
+[fresh] break-loudly       internal/ledger/resolve.go:238-245   conf 1.00
 [fresh] immutable-records  internal/ledger/record.go:42-55      conf 1.00
 [fresh] rename-threshold   internal/ledger/git.go:59-63         conf 1.00
 ```
@@ -161,9 +161,12 @@ from git is copied, bundled, or redistributed here.
 
 ## Status
 
-**v1.2.0.** Anchor engine (shift, fuzzy relocate, rename-follow), CI gate,
+**v1.2.1.** Anchor engine (shift, fuzzy relocate, rename-follow), CI gate,
 multi-anchor decisions, JSON IPC, and both editor integrations — all working
 and verified in their real hosts.
+
+The engine is **language-agnostic**: it reasons about git diffs and line
+ranges, never about syntax. Anything git tracks can carry a decision.
 
 Possible next: an in-process go-git engine instead of shelling out, and
 binding by symbol name rather than line range. See the
