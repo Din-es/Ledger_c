@@ -111,6 +111,18 @@ ledger list
 Those notes are worth reading before changing the resolver — each records a bug
 that was fixed the hard way.
 
+## A worked example
+
+[**Din-es/stepclaim**](https://github.com/Din-es/stepclaim) is a separate
+project — a step-claiming game — evolved across five versions with a bug in
+each, used to test what this tool does when code genuinely moves. It carries a
+hand-written change log beside the ledger's own output at every version, so the
+two can be compared.
+
+It is worth reading for two things: the ledger flagged a money bug that the
+project's own test suite passed, and evolving it exposed a real bug in the
+ledger, fixed in v1.2.1.
+
 ## Testing
 
 ```bash
