@@ -70,7 +70,7 @@ missing piece.
 
 **No account needed to test or share.** `npx @vscode/vsce package` produces a
 `.vsix` that anyone can install with
-`code --install-extension decision-ledger-1.1.0.vsix`. Worth doing before the
+`code --install-extension decision-ledger-<version>.vsix`. Worth doing before the
 public listing.
 
 ## 4. Obsidian community plugins
@@ -81,8 +81,10 @@ The plugin lives in its own repository:
 It was split out because Obsidian's community directory reads `manifest.json`
 from the repository root and requires a release tag matching it exactly with no
 `v` prefix — neither of which works from inside this Go monorepo. That repo
-already tags `1.1.0` (un-prefixed) and attaches `main.js`, `manifest.json` and
-`styles.css` loose on the release, which is what the directory expects.
+tags un-prefixed and attaches `main.js`, `manifest.json` and `styles.css` loose
+on the release, which is what the directory expects. Its release workflow fails
+the build if the tag and manifest disagree, and attests the built assets so the
+store's automated review can verify their provenance.
 
 To submit:
 

@@ -1,8 +1,5 @@
 /ledger
 /ledger.exe
-obsidian-plugin/node_modules/
-obsidian-plugin/main.js
-obsidian-plugin/package-lock.json
 vscode-extension/node_modules/
 vscode-extension/out/
 vscode-extension/package-lock.json
